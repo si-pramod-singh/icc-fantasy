@@ -7,6 +7,6 @@ plugins {
 
 configurations.all {
     resolutionStrategy {
-        cacheChangingModulesFor(0, "seconds")
+        cacheChangingModulesFor(60, "seconds")
     }
 }

@@ -45,6 +45,7 @@ import com.si.fantasyhostapp.ui.theme.FantasyHostAppTheme
 import com.si.iccfantasy.FantasyGame
 import com.si.iccfantasy.core.Fantasy
 import com.si.iccfantasy.core.FantasyAuthManager
+import com.si.iccfantasy.core.FantasyListener
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -59,6 +60,22 @@ class MainActivity : ComponentActivity() {
             versionName = packageManager.getPackageInfo(packageName, 0).versionName,
             locale = Locale.getDefault().toLanguageTag()
         )
+        Fantasy.listener = object : FantasyListener {
+            override fun openLoginPage() {
+                startLoginFlow()
+            }
+
+            override fun openRegistrationPage() {
+                startLoginFlow()
+            }
+
+            override fun logout() {}
+
+            override fun closeGame() {
+                //close game
+            }
+
+        }
         setContent {
 
             val coroutineScope = rememberCoroutineScope()
@@ -74,8 +91,7 @@ class MainActivity : ComponentActivity() {
                             Column {
                                 Spacer(modifier = Modifier.weight(1f))
                                 TextButton(onClick = {
-                                    //host app login operation
-                                    FantasyAuthManager.setAccessToken(UUID.randomUUID().toString())
+                                    startLoginFlow()
                                 }) {
                                     Text(text = "Click to Login")
                                 }
@@ -112,6 +128,12 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    private fun startLoginFlow() {
+        //host app login operation
+        //on success setting access token inside game
+        FantasyAuthManager.setAccessToken(UUID.randomUUID().toString())
     }
 }
 
